@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Therapist\TherapistController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Middleware\AdminAuthentication;
 use App\Http\Middleware\CustomMiddleware;
@@ -13,15 +14,17 @@ Route::post('/new-user', [UserController::class, 'create'])
         AdminAuthentication::class
     ]);
 
-Route::get('admin', [AdminController::class, 'getAdmin'])
-    ->middleware([AdminAuthentication::class])
+Route::get('/admin', [AdminController::class, 'getAdmin'])
     ->withoutMiddleware([CustomMiddleware::class]);
 
-/**
- * use middleware
- */
-Route::group(['middleware' => ['api']], function () {
-    Route::post('/api/test', [UserController::class, 'test']);
-})->withoutMiddleware([
-    AdminAuthentication::class,
-]);
+Route::get('/therapist', [TherapistController::class, 'index'])
+    ->withoutMiddleware([CustomMiddleware::class]);
+
+Route::post('/therapist', [TherapistController::class, 'create'])
+    ->withoutMiddleware([CustomMiddleware::class]);
+
+Route::delete('/therapist/{id}', [TherapistController::class, 'delete'])
+    ->withoutMiddleware([CustomMiddleware::class]);
+    
+Route::put('/therapist', [TherapistController::class, 'update'])
+    ->withoutMiddleware([CustomMiddleware::class]);

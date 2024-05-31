@@ -2,6 +2,9 @@
 
 namespace App\Models\Ai;
 
+use App\Models\Therapist\Therapist;
+use App\Models\Admin\Admin;
+use App\Models\User\User;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
@@ -27,9 +30,15 @@ class AiConversation
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Models\User\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Models\Admin\Admin")
+     * @ORM\JoinColumn(name="admin_id", referencedColumnName="id", nullable=true)
+     */
+    private $admin;
 
     /**
      * @ORM\Column(type="text")
@@ -49,10 +58,11 @@ class AiConversation
     /**
      * @throws \Exception
      */
-    public function __construct(int $therapistId, int $userId, string $message, string $sender)
+    public function __construct(Therapist $therapist, ?User $user, ?Admin $admin, string $message, string $sender)
     {
-        $this->therapist = $therapistId;
-        $this->user = $userId;
+        $this->therapist = $therapist;
+        $this->user = $user;
+        $this->admin = $admin;
         $this->message = $message;
         $this->sender = $sender;
         $this->sentAt = new DateTimeImmutable('now', new DateTimeZone('UTC'));
@@ -64,14 +74,19 @@ class AiConversation
         return $this->id;
     }
 
-    public function getTherapistId(): int
+    public function getTherapist(): Therapist
     {
         return $this->therapist;
     }
 
-    public function getUserId(): int
+    public function getUser(): User|null
     {
         return $this->user;
+    }
+
+    public function getAdmin(): Admin|null
+    {
+        return $this->admin;
     }
 
     public function getMessage(): string
@@ -89,4 +104,3 @@ class AiConversation
         return $this->sentAt;
     }
 }
-

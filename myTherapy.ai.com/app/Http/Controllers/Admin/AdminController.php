@@ -18,14 +18,14 @@ class AdminController extends controller
         if ($admin = $repository->getAdminUsernameOrEmail($validation->post('uname'))) {
             if ($service->passwordCheck($validation->post('psw'), $admin)) {
                 $token = $encryptionService->encrypt(json_encode(['uuid' => $admin->getUuid()]));
-                return response()->json(['login' => 'success'])->cookie('token', $token, 60*24);
+                return response()->json(['login' => 'success', 'token' => $token])->cookie('token', $token);
             }
         }
 
         return response()->json(['error' => 'Username, Email or password does not match'], 401);
     }
 
-    public function getAdmin(Authentication $authentication): Response // Update the method signature
+    public function getAdmin(Authentication $authentication): Response
     {
         return new Response(AdminResponse::one($authentication->getAdmin()));
     }

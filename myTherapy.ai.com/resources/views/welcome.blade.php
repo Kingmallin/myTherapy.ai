@@ -68,10 +68,10 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     if (data.login) {
+                        localStorage.setItem('token', data.token);
                         // Redirect to the admin dashboard
-                        window.location.href = '/admin';
+                        window.location.href = '/dash';
                     } else {
                         // Display the error message
                         errorMessage.textContent = data.error || 'An error occurred. Please try again.';

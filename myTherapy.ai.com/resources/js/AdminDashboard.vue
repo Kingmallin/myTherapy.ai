@@ -16,7 +16,7 @@
 <script setup>
 import Menu from './components/HeaderMenu/Menu.vue';
 import SideMenu from './components/SideMenu/SideMenu.vue';
-import { useRoute } from 'vue-router';
+
 </script>
 
 <style scoped>
@@ -49,9 +49,9 @@ import { useRoute } from 'vue-router';
 
 /* Example styling for the sidebar */
 .sidebar {
-    width: 18rem;
+    width: 8rem;
     background-color: #f8f9fa;
     height: 100%;
-    padding: 16px;
+    padding: 1px;
 }
 </style>

@@ -13,10 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->group('api', [
-            \App\Http\Middleware\CustomMiddleware::class,
-            \App\Http\Middleware\AdminAuthentication::class,
-        ]);
+        // $middleware->group('api', [
+        //     \App\Http\Middleware\CustomMiddleware::class,
+        //     \App\Http\Middleware\AdminAuthentication::class,
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

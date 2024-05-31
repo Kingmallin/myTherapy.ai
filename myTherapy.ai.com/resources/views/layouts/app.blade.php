@@ -6,7 +6,7 @@
     <title>{{ env('APP_NAME') }}</title>
     @vite('resources/css/app.css')
 </head>
-<body>
+<body class="app-background">
 <div id="app"></div>
 @vite('resources/js/app.js')
 </body>

@@ -1,23 +1,42 @@
 import { defineStore } from 'pinia';
-import { useAuthStore } from './useAuthStore';
+import axios from 'axios';
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/admin`;
 
-export const userStore = defineStore('users', {
+export const useUserStore = defineStore('userStore', {
     state: () => ({
-        users: [],
-        authStore: useAuthStore(),
-        token: useAuthStore().token
+        user: null,
+        token: localStorage.getItem('token') || '',
     }),
     actions: {
-        async fetchUser() {
-            const response = await axios.get(baseUrl, {
+        fetchUser() {
+            if (!this.token) return;
+
+            axios.get(baseUrl, {
                 headers: { Authorization: `Bearer ${this.token}` }
+            })
+            .then(response => {
+                this.user = response.data;
+            })
+            .catch(error => {
+                console.error(error);
+                this.user = null;
+                // Optionally handle token invalidation, e.g., redirect to login
+                // localStorage.removeItem('token');
+                // window.location = '/';
             });
-            this.users = response.data;
-            if (this.user === 'undefined' || this.user === null) {
-                window.location = '/';
-            }
-        }
+        },
+        setToken(token) {
+            this.token = token;
+            localStorage.setItem('token', token);
+        },
+    },
+    getters: {
+        isAuthenticated(state) {
+            return !!state.user;
+        },
+        getUser(state) {
+            return state.user;
+        },
     }
 });

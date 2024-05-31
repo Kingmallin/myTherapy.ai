@@ -1,20 +1,22 @@
 <template>
-    <div id="app">
+    <div >
         <AdminDashboard/>
     </div>
 </template>
 
 <script setup>
+import { onMounted, provide } from 'vue';
+import { useUserStore } from './pinia/userStore.js';
 import AdminDashboard from "./AdminDashboard.vue";
-import { userStore } from './pinia/userStore.js';
-import { onMounted } from 'vue';
+import connection from './echo.js';
 
-const authUserStore = userStore();
+const echo = connection();
+
+provide('echo', echo);
+const authUserStore = useUserStore();
 
 onMounted(() => {
-    if (authUserStore.token) {
-        authUserStore.fetchUser();
-    }
+  authUserStore.fetchUser();
 });
 </script>
 

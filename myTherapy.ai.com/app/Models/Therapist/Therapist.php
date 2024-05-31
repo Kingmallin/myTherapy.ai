@@ -12,7 +12,7 @@ class Therapist
 {
     private const ENCRYPTION_METHOD = 'aes-256-cbc';
     private const ENCRYPTION_KEY = 'f7dc78e5b6b84f4d1564811638c71c0d15e55a6c1486a833883a5d7490e23c64'; // move to env
-    private const ENCRYPTION_IV = '54b0c5c109b5d0fb286ec4402c83532f'; //move to env
+    private const ENCRYPTION_IV = '54b0c5c109b5d0fb'; //move to env
 
     /**
      * @ORM\Id
@@ -57,7 +57,7 @@ class Therapist
         $this->persona = $persona;
         $this->specialization = $specialization;
         $this->apiEndpoint = $apiEndpoint;
-        $this->setApiKey($apiKey); // Encrypt and store the API key
+        $this->setApiKey($apiKey);
         $this->additionalSettings = $additionalSettings;
     }
 

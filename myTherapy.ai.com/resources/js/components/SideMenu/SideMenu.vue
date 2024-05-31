@@ -1,6 +1,6 @@
 <template>
     <div class="card flex justify-center custom-menu">
-        <Menu :model="items" class="w-full md:w-15rem">
+        <Menu :model="items" class="w-70 md:w-15rem">
             <template #start>
                 <div class="flex items-center gap-1 px-2 py-2">
                     <Avatar />
@@ -32,11 +32,15 @@
 <script setup>
 import Avatar from "primevue/avatar";
 import Menu from 'primevue/menu';
-import { ref } from "vue";
+import {computed, ref} from "vue";
+import { useUserStore } from "../../pinia/userStore";
 
-const user = ref(window.user);
-const username = ref(user.value.userName);
-// const user = ref(authStore.user.userName);
+const userStore = useUserStore();
+
+const username = computed(() => {
+  return userStore.getUser?.userName || '';
+});
+
 const items = ref([
     {
         label: 'Sessions',
@@ -47,6 +51,11 @@ const items = ref([
         label: 'Therapist',
         icon: 'pi pi-user',
         to: '/therapist'
+    },
+    {
+        label: 'Therapist Test',
+        icon: 'pi pi-user',
+        to: '/testTherapist'
     },
     {
         label: 'Transactions',

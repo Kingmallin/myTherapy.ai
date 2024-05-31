@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c85a27566441e3ab70f26f16a92af0b7",
+    "content-hash": "9294a8a3e7d76d8a9cc0e833f17a49f1",
     "packages": [
         {
             "name": "brick/math",
@@ -2448,16 +2448,16 @@
         },
         {
             "name": "laravel/reverb",
-            "version": "v1.0.0-beta11",
+            "version": "v1.0.0-beta12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/reverb.git",
-                "reference": "f0cee423dce0ed8c8d65dbfdfc531b188627a50d"
+                "reference": "513fc427e86c66dfc0042e0c58243d80480c1e3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/reverb/zipball/f0cee423dce0ed8c8d65dbfdfc531b188627a50d",
-                "reference": "f0cee423dce0ed8c8d65dbfdfc531b188627a50d",
+                "url": "https://api.github.com/repos/laravel/reverb/zipball/513fc427e86c66dfc0042e0c58243d80480c1e3d",
+                "reference": "513fc427e86c66dfc0042e0c58243d80480c1e3d",
                 "shasum": ""
             },
             "require": {
@@ -2471,6 +2471,7 @@
                 "php": "^8.2",
                 "pusher/pusher-php-server": "^7.2",
                 "ratchet/rfc6455": "^0.3.1",
+                "react/async": "^4.2",
                 "react/promise-timer": "^1.10",
                 "react/socket": "^1.14",
                 "symfony/console": "^6.0|^7.0",
@@ -2481,7 +2482,6 @@
                 "pestphp/pest": "^2.0",
                 "phpstan/phpstan": "^1.10",
                 "ratchet/pawl": "^0.4.1",
-                "react/async": "^4.0",
                 "react/http": "^1.9"
             },
             "type": "library",
@@ -2524,9 +2524,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/reverb/issues",
-                "source": "https://github.com/laravel/reverb/tree/v1.0.0-beta11"
+                "source": "https://github.com/laravel/reverb/tree/v1.0.0-beta12"
             },
-            "time": "2024-05-09T17:23:01+00:00"
+            "time": "2024-05-27T13:55:38+00:00"
         },
         {
             "name": "laravel/sanctum",
@@ -4688,6 +4688,81 @@
                 "source": "https://github.com/ratchetphp/RFC6455/tree/v0.3.1"
             },
             "time": "2021-12-09T23:20:49+00:00"
+        },
+        {
+            "name": "react/async",
+            "version": "v4.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/async.git",
+                "reference": "7c3738e837b38c9513af44398b8c1b2b1be1fbbc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/async/zipball/7c3738e837b38c9513af44398b8c1b2b1be1fbbc",
+                "reference": "7c3738e837b38c9513af44398b8c1b2b1be1fbbc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "react/event-loop": "^1.2",
+                "react/promise": "^3.0 || ^2.8 || ^1.2.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "1.10.39",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions_include.php"
+                ],
+                "psr-4": {
+                    "React\\Async\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@clue.engineering",
+                    "homepage": "https://clue.engineering/"
+                },
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "reactphp@ceesjankiewiet.nl",
+                    "homepage": "https://wyrihaximus.net/"
+                },
+                {
+                    "name": "Jan Sorgalla",
+                    "email": "jsorgalla@gmail.com",
+                    "homepage": "https://sorgalla.com/"
+                },
+                {
+                    "name": "Chris Boden",
+                    "email": "cboden@gmail.com",
+                    "homepage": "https://cboden.dev/"
+                }
+            ],
+            "description": "Async utilities and fibers for ReactPHP",
+            "keywords": [
+                "async",
+                "reactphp"
+            ],
+            "support": {
+                "issues": "https://github.com/reactphp/async/issues",
+                "source": "https://github.com/reactphp/async/tree/v4.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://opencollective.com/reactphp",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2023-11-22T16:43:46+00:00"
         },
         {
             "name": "react/cache",

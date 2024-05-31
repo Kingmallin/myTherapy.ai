@@ -1,0 +1,43 @@
+<template>
+    <Card class="container">
+        <template #title>Simple Card</template>
+        <template #content>
+            <TabView>
+                <TabPanel v-for="therapist in therapists" :key="therapist.id" :header="therapist.name">
+                    <TherapistChat :id="therapist.id" />
+                </TabPanel>
+            </TabView>
+        </template>
+    </Card>
+</template>
+<script setup>
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import Card from 'primevue/card';
+import { ref, onMounted } from 'vue';
+import useTherapist from '../../composables/Therabist/handleTherapist.js';
+import TherapistChat from './TherapistChat.vue';
+import connection from '../../echo.js';
+
+const echo = connection();
+const { 
+    therapists, 
+    loading, 
+    error, 
+    fetchTherapists, 
+} = useTherapist();
+
+onMounted(() => {
+    fetchTherapists();
+})
+</script>
+
+<style scoped>
+
+.container {
+ margin-top: 1rem !important;   
+}
+.main-content {
+    padding-left: 0;
+}
+</style>

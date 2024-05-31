@@ -7,7 +7,6 @@ use App\Models\User\Authentication\Authentication;
 use App\Models\User\Services\EncryptionService;
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class AdminAuthentication
 {
@@ -17,16 +16,13 @@ class AdminAuthentication
         private readonly Authentication $authentication
     ) {}
 
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
         $inputToken = $request->bearerToken() ?: $request->cookie('token');
-
         if ($inputToken) {
             $decryptedToken = $this->encryptionService->decrypt($inputToken);
-
             if (isset($decryptedToken->uuid)) {
                 $admin = $this->adminRepository->findByUuid($decryptedToken->uuid);
-
                 if ($admin) {
                     $this->authentication->setAdmin($admin);
 
@@ -34,7 +30,6 @@ class AdminAuthentication
                 }
             }
         }
-
-        return redirect('/');
+        return response()->view('welcome');
     }
 }
