@@ -11,7 +11,7 @@ class AiConversationRepository
 
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->repository->getRepository(AiConversation::class);
+        $this->repository = $this->entityManager->getRepository(AiConversation::class);
     }
 
     public function save($aiConversation)

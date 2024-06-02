@@ -5,6 +5,7 @@ use App\Http\Controllers\Therapist\TherapistController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Middleware\AdminAuthentication;
 use App\Http\Middleware\CustomMiddleware;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Routes excluded from CustomMiddleware

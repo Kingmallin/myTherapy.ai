@@ -14,10 +14,10 @@ use Doctrine\ORM\EntityManagerInterface;
     }
 
     /**
-     * @param string $uUid
+     * @param null|string $uUid
      * @return User|null
      */
-    public function findByUuid(string $uUid): User|null
+    public function findByUuid(?string $uUid): User|null
     {
         return $this->repository->findOneBy(['uUid' => $uUid]);
     }

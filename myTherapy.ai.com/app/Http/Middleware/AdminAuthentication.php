@@ -19,6 +19,7 @@ class AdminAuthentication
     public function handle(Request $request, Closure $next)
     {
         $inputToken = $request->bearerToken() ?: $request->cookie('token');
+        
         if ($inputToken) {
             $decryptedToken = $this->encryptionService->decrypt($inputToken);
             if (isset($decryptedToken->uuid)) {

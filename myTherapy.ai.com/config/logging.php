@@ -7,6 +7,12 @@ use Monolog\Processor\PsrLogMessageProcessor;
 
 return [
 
+    'websocket' => [
+        'driver' => 'single',
+        'path' => storage_path('logs/websocket.log'),
+        'level' => env('LOG_LEVEL', 'debug'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Default Log Channel
@@ -18,8 +24,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
-
+    'default' => env('LOG_CHANNEL', 'websocket'),
     /*
     |--------------------------------------------------------------------------
     | Deprecations Log Channel

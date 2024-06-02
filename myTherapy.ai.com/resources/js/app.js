@@ -9,6 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import 'primevue/resources/themes/aura-light-green/theme.css';
 import { PrimeIcons } from 'primevue/api';
 import { routes } from "./routes.js";
+import './bootstrap.js';
+// import { WebSocketUtility } from './websocket.js';
+
+// const { connect } = WebSocketUtility();
+
+// connect();
 
 // Create Vue app instance
 const app = createApp(App);

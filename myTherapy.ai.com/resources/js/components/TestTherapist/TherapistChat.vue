@@ -6,7 +6,7 @@
           <div
             v-for="(message, index) in messages"
             :key="index"
-            :class="['message', message.sender === 'me' ? 'sent' : 'received']"
+            :class="['message', message.sender === 'user' ? 'sent' : 'received']"
           >
             <p>{{ message.text }}</p>
           </div>
@@ -20,22 +20,22 @@
   </div>
 </template>
 
+
 <script setup>
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-import { ref, onMounted, inject } from 'vue';
+import { onMounted } from 'vue';
 import useChat from '../../composables/Chat/useChat.js';
-import { useRoute } from 'vue-router';
 import { useUserStore } from '../../pinia/userStore.js';
 
-const echo = inject('echo');
-echo.channel('test')
-    .listen('AdminToAi', (event) => {
-        receiveMessage(event.message);
-    });
-
-const { setChannle, channel, messages, newMessage, sendMessage, receiveMessage } = useChat();
+const {
+  subscribe,
+  setChannel,
+  messages,
+  newMessage,
+  sendMessage
+} = useChat();
 
 const props = defineProps({
   id: {
@@ -47,7 +47,8 @@ const props = defineProps({
 const userStore = useUserStore();
 
 onMounted(() => {
-  setChannle(`admin.therapist.${userStore.getUser?.uuid}.${props.id}`); // Uncomment and adjust channel name
+  setChannel(userStore.getUser?.uuid, props.id);
+  subscribe();
 });
 </script>
 
