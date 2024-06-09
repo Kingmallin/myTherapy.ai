@@ -9,7 +9,7 @@ class WebSocketRepository
 {
     public $repository;
 
-    public function __construct(public readonly EntityManagerInterface $entityManager)
+    public function __construct(public EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
         $this->repository = $entityManager->getRepository(WebSocketConnection::class);
@@ -48,14 +48,14 @@ class WebSocketRepository
         $this->entityManager->flush();
     }
 
-    /**
+     /**
      * Find WebSocket connections by criteria.
      *
      * @param array $criteria
      * @return WebSocketConnection[]
      */
-    public function findByArray(array $criteria): array
+    public function findByArray(array $criteria)
     {
-        return $this->repository->findOneBy($criteria);
+        return $this->repository->findBy($criteria);
     }
 }

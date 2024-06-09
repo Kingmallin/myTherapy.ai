@@ -21,7 +21,7 @@ export default function useChat() {
   const connectWebSocket = (user, tId, type) => {
       channel.value = `${user}.${tId}.${type}`;
 
-      socket = new WebSocket(`${WEBSOCKET_URL}?clientId=${channel.value}/?type=admin`);
+      socket = new WebSocket(`${WEBSOCKET_URL}?channel=admin.${channel.value}`);
 
       socket.addEventListener('open', () => {
           console.log('WebSocket connected');
@@ -33,7 +33,6 @@ export default function useChat() {
 
       socket.addEventListener('error', (event) => {
           console.error('WebSocket error:', event);
-          receiveMessage(event);
       });
 
       socket.addEventListener('message', (event) => {
@@ -51,7 +50,7 @@ export default function useChat() {
                 sender: 'user',
                 target: targetClient.value
             },
-            channel: channel.value,
+            channel: `admin.${channel.value}`,
         }));
         messages.value.push({ text: newMessage.value, sender: 'user' });
         newMessage.value = '';
@@ -66,7 +65,6 @@ export default function useChat() {
 
 
   const receiveMessage = (event) => {
-    console.log(event);
     messages.value.push({ text: event.message, sender: event.from });
   };
 
