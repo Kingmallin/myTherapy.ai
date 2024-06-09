@@ -1,0 +1,320 @@
+/* Custom Tailwind CSS */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom Utility Classes */
+.text-primary {
+    color: green;
+}
+
+.app-background {
+    background-color: #f8f9fa;
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.items-end {
+    align-items: flex-end;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.top-7 {
+    top: 7.4rem;
+}
+
+.top-3 {
+    top: 3rem;
+}
+
+.right-1 {
+    right: 1rem;
+}
+
+.clear {
+    clear: both;
+}
+
+/* Spacing Utilities */
+.mt-3 {
+    margin-top: 3rem;
+}
+
+.mt-7 {
+    margin-top: 7rem;
+}
+
+.mt-8 {
+    margin-top: 8rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+/* Flex Utilities */
+.flex-column {
+    flex-direction: column;
+}
+
+.gap-2 > * + * {
+    margin-top: 0.5rem;
+}
+
+/* Form Field Styling */
+.input-label {
+    font-size: 1rem;
+}
+
+.input-text {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+}
+
+.input-textarea { /* Fixed class name */
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+}
+
+/* Button Styling */
+.button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #388e3c;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* Font Weight */
+.font-light {
+    font-weight: lighter;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+/* Text Size */
+.text-xs {
+    font-size: 0.75rem;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.text-lg {
+    font-size: 1.25rem;
+}
+
+.text-xl {
+    font-size: 1.5rem;
+}
+
+/* Background Colors */
+.bg-gray-100 {
+    background-color: #f5f5f5;
+}
+
+.bg-gray-200 {
+    background-color: #eeeeee;
+}
+
+.bg-gray-300 {
+    background-color: #e0e0e0;
+}
+
+.bg-gray-400 {
+    background-color: #bdbdbd;
+}
+
+.bg-gray-500 {
+    background-color: #9e9e9e;
+}
+
+/* Border */
+.border {
+    border: 1px solid #ddd;
+}
+
+.border-gray {
+    border-color: #ccc;
+}
+
+.border-solid {
+    border-style: solid;
+}
+
+/* Rounded Corners */
+.rounded {
+    border-radius: 0.25rem;
+}
+
+.rounded-sm {
+    border-radius: 0.125rem;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+/* Box Shadow */
+.shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Cursor */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Overflow */
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-auto {
+    overflow: auto;
+}
+
+/* Width and Height */
+.w-full {
+    width: 100%;
+}
+
+.w-70 {
+    width: 70%;
+}
+
+.h-full {
+    height: 100%;
+}
+
+.md\:w-1\/2 {
+    width: 50%;
+}
+
+@media (min-width: 768px) {
+    .md\:w-1\/2 {
+        width: 50%;
+    }
+}
+
+.my-3 {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.flex.flex-col.gap-2 label {
+    margin-bottom: 0.5rem; /* Adjust the value as needed */
+}
+
+/* Change flex direction to column */
+.flex.flex-col.gap-2 {
+    flex-direction: column;
+}
+
+input {
+    margin-right: 1rem;
+    width: 70%;
+}
+
+.min-40 {
+    width: 100%;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Ensures children take full width */
+    margin-left:5rem;
+    margin-top: 2rem;
+  }
+  
+  .header {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .content {
+    width: 100%;
+    margin-top: 1rem; /* Adds some space between the components */
+  }
+  
+  /* Hide scrollbars in WebKit browsers (Chrome, Safari) */
+  .content::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbars in IE, Edge, and Firefox */
+  .content {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .left-19 {
+    left: 19rem;
+  }
+
+/* Chat bubble styles */
+.chat-bubble {
+    max-width: 70%; /* Maximum width of the chat bubble */
+    margin: 10px; /* Margin around the chat bubble */
+    padding: 10px; /* Padding inside the chat bubble */
+    border-radius: 20px; /* Border radius for rounded corners */
+    word-wrap: break-word; /* Wrap long words within the bubble */
+    overflow-wrap: break-word; /* Wrap long words for browser compatibility */
+  }
+  
+  /* User's chat bubble */
+  .user-bubble {
+    background-color: #DCF8C6; /* Light green for user's messages */
+    color: #333; /* Dark text color */
+    text-align: right; /* Align text to the right */
+  }
+  
+  /* AI's chat bubble */
+  .ai-bubble {
+    background-color: #CCE5FF; /* Light blue for AI's messages */
+    color: #333; /* Dark text color */
+    text-align: left; /* Align text to the left */
+  }
+  
