@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class WebSocketRepository
 {
-    protected $repository;
+    public $repository;
 
     public function __construct(public readonly EntityManagerInterface $entityManager)
     {
