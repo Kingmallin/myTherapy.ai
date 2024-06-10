@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin\Repository\AdminRepository;
+use App\Models\Ai\AiConversation;
+use App\Models\Ai\Repository\AiConversationRepository;
+use App\Models\Ai\Service\AiChatBotService;
+use App\Models\Therapist\Repository\TherapistRepository;
 use App\Models\User\Repository\UserRepository;
 use App\Models\Websocket\Repository\WebSocketRepository;
 use App\Models\Websocket\Service\websocketService;
@@ -20,6 +24,10 @@ class SocketController implements MessageComponentInterface
     protected $entityManager;
     protected $websocketRepository;
     protected $websocketService;
+    protected $therapistRepository;
+    protected $userRepository;
+    protected $adminRepository;
+    protected $aiConversationRepository;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -28,37 +36,44 @@ class SocketController implements MessageComponentInterface
         $this->entityManager = $entityManager;
         $this->websocketRepository = new WebSocketRepository($entityManager);
         $this->websocketService = new websocketService($this->websocketRepository);
+        $this->therapistRepository = new TherapistRepository($entityManager);
+        $this->userRepository = new UserRepository($entityManager);
+        $this->adminRepository = new AdminRepository($entityManager);
+        $this->aiConversationRepository = new AiConversationRepository($entityManager);
     }
 
     public function onOpen(ConnectionInterface $conn)
     {
-        Log::info('onOpen called');
         $queryParams = $conn->httpRequest->getUri()->getQuery();
         parse_str($queryParams, $queryArray);
         
         $channel = $queryArray['channel'] ?? null;
         if ($channel) {
-            $userRepository = new UserRepository($this->entityManager);
-            $adminRepository = new AdminRepository($this->entityManager);
 
             $user = null;
             $admin = null;
-            $explodedChannel = explode('.', $channel) ?? null;
+            $webSocketConnection = null;
+            $explodedChannel = explode('.', $channel);
 
-            if ($explodedChannel[0] === 'admin') {
-                $admin = $adminRepository->findByUuid($explodedChannel[1]);
+            if ($explodedChannel[0] === 'admin' && isset($explodedChannel[1])) {
+                $admin = $this->adminRepository->findByUuid($explodedChannel[1]);
                 if ($entity = $this->websocketRepository->findByArray([
                     'admin' => $admin,
                     'channel' => $channel
-                    ])) {
-                        Log::info('found exsiting and updated');
-                        //entity should only ever be one
-                        foreach ( $entity as $connection) {
-                          $this->websocketService->update($entity, $conn->resourceId);  
+                ])) {
+                    Log::info('found existing and updated');
+                    // entity should only ever be one
+                    $count = 0;
+                    foreach ($entity as $socket) {
+                        if ($count > 1) {
+                            continue;
+                        } else {
+                            $count++;
+                            $this->websocketService->update($socket, $conn->resourceId);  
+                            $webSocketConnection = $socket;
                         }
-                    
+                    }
                 } else {
-                    Log::info('not found creating new socket record');
                     $webSocketConnection = new WebSocketConnection(
                         $user,
                         $admin,
@@ -66,29 +81,19 @@ class SocketController implements MessageComponentInterface
                         $channel,
                         'UTC'
                     );
+                    // Save $webSocketConnection to the database
+                    $this->entityManager->persist($webSocketConnection);
+                    $this->entityManager->flush();
                 }
                 $user = null;
                 $id = $admin->getId();
-            } else if ($explodedChannel[0] === 'user') {
-                $user = $userRepository->findByUuid($explodedChannel[1]);
+            } else if ($explodedChannel[0] === 'user' && isset($explodedChannel[1])) {
+                $user = $this->userRepository->findByUuid($explodedChannel[1]);
                 $admin = null;
                 $id = $user->getId();
             } else {
                 throw new Exception('Only valid users can send messages');
             }
-
-
-            $webSocketConnection = new WebSocketConnection(
-                $user,
-                $admin,
-                $conn->resourceId,
-                $channel,
-                'UTC'
-            );
-
-            // Save $webSocketConnection to the database
-            $this->entityManager->persist($webSocketConnection);
-            $this->entityManager->flush();
 
             $this->clients->attach($conn, $webSocketConnection);
             $this->clientMap[$channel][$conn->resourceId] = $conn;
@@ -101,9 +106,7 @@ class SocketController implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $conn, $msg)
     {
-        Log::info('onMessage called');
         $data = json_decode($msg, true);
-        Log::info('Message received', ['data' => $data, 'conn' => $conn]);
 
         $target = $data['data']['target'] ?? null;
         $channel = $data['channel'] ?? null;
@@ -113,21 +116,66 @@ class SocketController implements MessageComponentInterface
         ]);
 
         echo "Message should be sent to channel: {$channel}\n";
-        if ($target) {
-            $aiResponse = $this->getAIResponse($data['data']['message']);
-            $response = [
-                'from' => 'AI',
-                'message' => $aiResponse
-            ];
 
-            foreach ($connected as $receiver) {
-                Log::info("Sending message to channel: {$channel}, socket Id: {$receiver->getClientId()}");
-                echo "Sending message to {$channel} socket Id {$receiver->getClientId()} ";
-                foreach ($this->clients as $client) {
-                    if ($receiver->getClientId() == $client->resourceId) {
-                        $client->send(json_encode($response)); 
+        if ($target) {
+            try {
+                $explodedChannel = explode('.', $channel);
+                if (count($explodedChannel) < 3) {
+                    throw new Exception('Invalid channel format');
+                }
+
+                $therapist = $this->therapistRepository->findById($explodedChannel[2]);
+
+                if ($explodedChannel[0] === 'admin' && isset($explodedChannel[1])) {
+                    $admin = $this->adminRepository->findByUuid($explodedChannel[1]);
+                    $user = null;
+                } else {
+                    $user = $this->userRepository->findByUuid($explodedChannel[1]);
+                    $admin = null;
+                }
+
+                $aiConversation = new AiConversation(
+                    $therapist,
+                    $user,
+                    $admin,
+                    $data['data']['message'],
+                    $data['data']['sender']
+                );
+
+                $aiResponse = $this->getAIResponse(
+                    $therapist,
+                    $user,
+                    $admin,
+                    $data['data']['message'],
+                    $data['data']['sender']
+                );
+
+                $aiConversation = new AiConversation(
+                    $therapist,
+                    $user,
+                    $admin,
+                    $aiResponse,
+                    'Therapist'
+                );
+
+                // Save the conversation to the database
+                $this->aiConversationRepository->save($aiConversation);
+
+                $response = [
+                    'from' => 'AI',
+                    'message' => $aiResponse
+                ];
+
+                foreach ($connected as $receiver) {
+                    echo "Sending message to {$channel} socket Id {$receiver->getClientId()} ";
+                    foreach ($this->clients as $client) {
+                        if ($receiver->getClientId() == $client->resourceId) {
+                            $client->send(json_encode($response)); 
+                        }
                     }
                 }
+            } catch (Exception $e) {
+                Log::error('error: ' . $e->getMessage());
             }
         } else {
             Log::info('Invalid target or target not provided in the message data');
@@ -136,18 +184,18 @@ class SocketController implements MessageComponentInterface
 
     public function onClose(ConnectionInterface $conn)
     {
-        Log::info('onClose called');
-        $webSocketConnection = $this->clients[$conn];
-        $webSocketConnection->deactivate();
+        $webSocketConnection = $this->clients[$conn] ?? null;
+        if ($webSocketConnection) {
+            $webSocketConnection->deactivate();
 
-        // Update the connection in the database
-        $this->entityManager->flush();
+            // Update the connection in the database
+            $this->entityManager->flush();
 
-        $channel = $webSocketConnection->getChannel();
-        unset($this->clientMap[$channel][$conn->resourceId]);
+            $channel = $webSocketConnection->getChannel();
+            unset($this->clientMap[$channel][$conn->resourceId]);
+        }
 
         $this->clients->detach($conn);
-        Log::info("Connection {$conn->resourceId} has disconnected");
         echo "Connection {$conn->resourceId} has disconnected\n";
     }
 
@@ -157,15 +205,23 @@ class SocketController implements MessageComponentInterface
         $conn->close();
     }
 
-    private function getAIResponse($message)
+    private function getAIResponse($therapist, $user, $admin, $message, $sender)
     {
-        // Example AI integration (replace with actual AI service call)
-        Log::info('getAIResponse called');
-        $response = "Echo: " . $message; // Simple echo response for demonstration
+        $aiConversation = new AiConversation(
+            $therapist,
+            $user,
+            $admin,
+            $message,
+            $sender
+        );
 
-        // Assuming you're using some AI service, e.g., OpenAI API, implement the call here.
-        // $response = $this->callAIService($message);
+        // Save the conversation to the database
+        $this->aiConversationRepository->save($aiConversation);
 
-        return $response;
+        // Use AiChatBotService to make the API call
+        $aiChatBotService = new AiChatBotService($therapist, $this->aiConversationRepository);
+        $response = $aiChatBotService->makeApiCall($user ? $user : null, $admin ? $admin : null);
+
+        return $response['choices'][0]['message']['content'];
     }
 }

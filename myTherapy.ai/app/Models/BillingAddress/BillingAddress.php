@@ -2,6 +2,7 @@
 
 namespace App\Models\BillingAddress;
 
+use App\Models\User\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
