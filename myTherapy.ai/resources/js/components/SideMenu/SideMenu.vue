@@ -43,9 +43,9 @@ const username = computed(() => {
 
 const items = ref([
     {
-        label: 'Sessions',
+        label: 'Chat Room\'s',
         icon: 'pi pi-calendar',
-        to: '/sessions'
+        to: '/rooms'
     },
     {
         label: 'Therapist',
@@ -58,9 +58,9 @@ const items = ref([
         to: '/testTherapist'
     },
     {
-        label: 'Transactions',
+        label: 'Mental Health Condition\'s',
         icon: 'pi pi-money-bill',
-        to: '/transactions'
+        to: '/health-categorys'
     },
     {
         label: 'Blogs',

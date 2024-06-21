@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Blog\BlogController;
 use App\Http\Controllers\Therapist\TherapistController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Middleware\AdminAuthentication;
@@ -20,6 +21,15 @@ Route::middleware([AdminAuthentication::class])->group(function () {
     Route::delete('/therapist/{id}', [TherapistController::class, 'delete']);
 
     Route::put('/therapist', [TherapistController::class, 'update']);
+
+    Route::post('/blog', [BlogController::class, 'create']);
+
+    Route::get('/blog', [BlogController::class, 'index']);
+
+    Route::put('/blog', [BlogController::class, 'update']);
+
+    Route::delete('/blog/{id}', [BlogController::class, 'delete']);
+
 });
 
 // Other routes that should use CustomMiddleware

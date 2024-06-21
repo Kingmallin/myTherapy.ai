@@ -29,7 +29,7 @@ class TherapistController extends controller
             $validation->post('name'),
             $validation->post('persona'),
             $validation->post('specialization'),
-            $validation->post('apiEndpoint'),
+            $validation->post('apiEndPoint'),
             $validation->post('apiKey'),
             $validation->post('additionalSettings')
             )));

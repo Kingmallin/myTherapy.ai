@@ -69,6 +69,15 @@ const newTherapist = ref({
 });
 
 const createNewTherapist = async () => {
-    await createTherapists(newTherapist)
+    await createTherapists(newTherapist);
+    showNewTherapist.value = false;
+    newTherapist = {
+        name: "",
+        persona: "",
+        specialization: "",
+        encryptedApiKey: "",
+        apiEndpoint: "",
+        additionalSettings: ""
+    };
 };
 </script>
